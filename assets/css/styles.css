@@ -1,14 +1,18 @@
 /* When you mouse over the navigation links, change their color */
+:root {
+  --sider_bar_width: 200px ; }
+
 .page-main {
   padding: 10px;
   height: auto;
-  overflow: hidden; }
+  overflow: hidden;
+  margin-left: 10px; }
 
 /* When you mouse over the navigation links, change their color */
 .page-sidebar {
   height: 100%;
   /* Full-height: remove this if you want "auto" height */
-  width: 200px;
+  width: var(--sider_bar_width);
   position: fixed;
   /* Fixed Sidebar (stay in place on scroll) */
   color: black;
@@ -21,11 +25,12 @@
   overflow-x: hidden;
   /* Disable horizontal scroll */
   padding-top: 20px;
+  padding-left: 10px;
   display: block; }
 
 /* Style page content */
 .page-content {
-  margin-left: 200px;
+  margin-left: var(--sider_bar_width);
   /* Same as the width of the sidebar */
   /* padding: 0px 10px; */
   width: auto;
