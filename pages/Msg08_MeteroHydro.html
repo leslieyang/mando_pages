@@ -1,0 +1,355 @@
+<!doctype html>
+<html>
+    <!--head-->
+    <head>
+    <meta charset="utf-8">
+    <title>Msg08_meterohydro</title>
+    <link rel="stylesheet" href="/mando_doc/assets/css/styles.css">
+</head>
+    <!--head-->
+    <body>
+        <div class="page-main">
+        <!-- sidebar -->
+        <div class="page-sidebar">
+    
+    
+
+    <a  href="/mando_doc/index.html">Home</a>
+    
+    <h3>Introduction</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/README.html">Introduction</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/MANDO_IO.html">Interface</a>
+        
+        </p>
+    
+    <h3>Support Sentence</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/NMEA0183.html">NMEA0183</a>
+        
+        </p>
+    
+    <h3>Support AIS Message</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/MANDO_MsgIdIndex_Usage.html">Message Usage</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/Msg06_GLA.html">IALA Msg6</a>
+        
+            
+            
+            <a class="active" href="/mando_doc/pages/Msg08_MeteroHydro.html">IMO Metero Hydro</a>
+        
+        </p>
+    
+    <h3>FAQ</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/Chaining.html">Chaining</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/AtoNStatusBits.html">AtoN Status Bits</a>
+        
+        </p>
+    
+</div>
+
+        <!-- sidebar -->
+
+        <!-- content -->
+        <div class="page-content">
+    <h1 id="meteorological-and-hydrographic-data">Meteorological and Hydrographic data</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>No. of bits</th>
+      <th>NMEA0183 formatter</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">Message Id</code></td>
+      <td>6</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Repeat Indicator</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Source ID</code></td>
+      <td>30</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Spare</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">IAI</code></td>
+      <td>16</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Longitude</code></td>
+      <td>25</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Latitude</code></td>
+      <td>24</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Position Accuracy</code></td>
+      <td>1</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">UTC Day</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">UTC Hour</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">UTC Minute</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Average Wind Speed</code></td>
+      <td>7</td>
+      <td>MWD wind speed output</td>
+      <td>The wind speed provided by the sensor is averaged over 10 minutes before transmit AIS message</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wind Gust</code></td>
+      <td>7</td>
+      <td>MWD wind speed output</td>
+      <td>This value is the peak wind speed recorded during the previous 10 minute period</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wind Direction</code></td>
+      <td>9</td>
+      <td>MWD wind speed output</td>
+      <td>The wind direction provided by the sensor is averaged over 10 minutes before transmit AIS message</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wind Gust Direction</code></td>
+      <td>9</td>
+      <td>MWD wind direction output</td>
+      <td>The direction of the wind at the peak wind speed during the previous 10 minute period</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Air Temperature</code></td>
+      <td>11</td>
+      <td>MDA air temperature output</td>
+      <td>The air temperature provided by the sensor is averaged over 10 minutes before output</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Relative Humidity</code></td>
+      <td>7</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Dew Point</code></td>
+      <td>10</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Air Pressure</code></td>
+      <td>9</td>
+      <td>MDA barometric pressure output</td>
+      <td>The barometric pressure provided by the sensor is averaged over 10 minutes before output</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Air Pressure Tendency</code></td>
+      <td>2</td>
+      <td>MDA barometric pressure output</td>
+      <td>The air pressure is monitored over a 30 minute period and ‘steady’, ‘increasing’ or ‘decreasing’ tendency reported as appropriate</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Horizontal Visibility</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Water level (incl. tide)</code></td>
+      <td>12</td>
+      <td> </td>
+      <td>Water level averaged over the data reporting interval specified for this message.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Water Level Trend</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Surface Current Speed (incl.tide)</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Surface Current Direction</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Speed, #2</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Direction, #2</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Measuring level, #2</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Speed, #3</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Direction, #3</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Measuring level, #3</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Significant Wave Height</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wave Period</code></td>
+      <td>6</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wave Direction</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Swell Height</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Swell Period</code></td>
+      <td>6</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Swell Direction</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Sea State</code></td>
+      <td>4</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Water Temperature</code></td>
+      <td>10</td>
+      <td>MTW, water temperature degrees C</td>
+      <td>Current temperature reported by the sensor</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Precipitation (type)</code></td>
+      <td>3</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Salinity</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Ice</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Spare</code></td>
+      <td>10</td>
+      <td> </td>
+      <td>-</td>
+    </tr>
+  </tbody>
+</table>
+
+
+</div>
+        <!-- content -->
+        </div>
+    </body>
+</html>

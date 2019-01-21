@@ -1,0 +1,856 @@
+<!doctype html>
+<html>
+    <!--head-->
+    <head>
+    <meta charset="utf-8">
+    <title>Mando_v1.5</title>
+    <link rel="stylesheet" href="/mando_doc/assets/css/styles.css">
+</head>
+    <!--head-->
+    <body>
+        <div class="page-main">
+        <!-- sidebar -->
+        <div class="page-sidebar">
+    
+    
+
+    <a  href="/mando_doc/index.html">Home</a>
+    
+    <h3>Introduction</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/README.html">Introduction</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/MANDO_IO.html">Interface</a>
+        
+        </p>
+    
+    <h3>Support Sentence</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/NMEA0183.html">NMEA0183</a>
+        
+        </p>
+    
+    <h3>Support AIS Message</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/MANDO_MsgIdIndex_Usage.html">Message Usage</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/Msg06_GLA.html">IALA Msg6</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/Msg08_MeteroHydro.html">IMO Metero Hydro</a>
+        
+        </p>
+    
+    <h3>FAQ</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/Chaining.html">Chaining</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/AtoNStatusBits.html">AtoN Status Bits</a>
+        
+        </p>
+    
+</div>
+
+        <!-- sidebar -->
+
+        <!-- content -->
+        <div class="page-content">
+    <h1 id="amec-mando-message-format">AMEC MANDO Message format</h1>
+
+<p>[ToC]</p>
+
+<h2 id="aton-status-bits">AtoN Status Bits</h2>
+
+<p>The table below represents the recommended use of these bits.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"> </th>
+      <th style="text-align: center">111</th>
+      <th style="text-align: center">XX</th>
+      <th style="text-align: center">XX</th>
+      <th style="text-align: center">X</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">Bit</td>
+      <td style="text-align: center">765</td>
+      <td style="text-align: center">43</td>
+      <td style="text-align: center">21</td>
+      <td style="text-align: center">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Name</td>
+      <td style="text-align: center">Page ID</td>
+      <td style="text-align: center">RACON Status</td>
+      <td style="text-align: center">Light Status</td>
+      <td style="text-align: center">Health Flag</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Bit</th>
+      <th style="text-align: center">Name</th>
+      <th>Description</th>
+      <th>MANDO</th>
+      <th>SensorBox</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>765</td>
+      <td style="text-align: center">Page ID</td>
+      <td>111(7), fixed value</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>43</td>
+      <td style="text-align: center">RACON Status</td>
+      <td>00 = No RACON installed<br />01 = RACON installed but not monitored<br />10 = RACON operational<br />11 = RACON Error</td>
+      <td>Not support</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td>21</td>
+      <td style="text-align: center">Light Status</td>
+      <td>00 = No light or no monitoring<br />01 = Light ON<br />10 = Light OFF<br />11 = Light fail or reduced ragne</td>
+      <td>ADC4/Digital Input</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td>0</td>
+      <td style="text-align: center">Health Flag</td>
+      <td>0 = Good health<br />1 = Alarm</td>
+      <td>Auto</td>
+      <td>Auto</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>These bits shall be employed as follows:</p>
+
+<p>The first three bits shall be used to define a Page ID. The Page ID can range from 0 to 7, allowing 8 pages. The first page (page 0) is not used for the Regional/International application and is
+defined as the default ‘not used’ condition in Recommendation ITU-R M.1371. Page 7 (binary 111) is defined above. Pages 1 to 6 are reserved for future use. The future use is envisaged as being
+for monitoring of AtoN parameters such as voltages, currents, temperatures, etc.</p>
+
+<p>Page 7 shall be implemented in all types of AIS AtoN Stations. The final 5 data bits are defined as
+in the diagram above.</p>
+
+<h3 id="note">Note</h3>
+
+<ol>
+  <li>Manufacturer’s default setting for the eight AtoN Status bits of Message 21 should be all zeros.</li>
+  <li>One bit is used for alerting the competent authority that there is a problem at the AIS AtoN Station. This allows a competent authority to avoid using Message 6, if there is pressure on VDL slots, while still receiving some monitoring information every time Message 21 is sent by the AIS AtoN Station.</li>
+  <li>Health flag alarm should be set to 1 to indicate a fault in or failure of the AtoN system or AIS AtoN station, at this location. Further indication of the fault or failure detail can be achieved by use of additional pages within the eight AtoN Status bits, or addressed binary Message 6.</li>
+  <li>By using only page 7 there is no need to toggle through the messages, only Message Id 7 has to be read thus allowing an immediate filtering.</li>
+  <li>Main Light Status - For the main light, a fail is a situation where:
+    <ol>
+      <li>The light is off when it should be on.</li>
+      <li>The flash character is incorrect (e.g. an optic drive failure).</li>
+      <li>The ‘Main light fail’ may be set if the main light is operating at a reduced range (e.g. running on emergency, lower range, lanterns).</li>
+    </ol>
+  </li>
+  <li>Racon Status - For the Racon, a fail is a situation where the Racon unit signals a failure from an on-board built-in integrity test (BIIT). It may also signify a power failure for the Racon;</li>
+  <li>AtoN Alarm Flag:
+    <ol>
+      <li>The AtoN Alarm flag is un-set when all the AtoN devices are working correctly and the mariner should be able to use the AtoN as expected.</li>
+      <li>The AtoN Alarm flag is set when any AtoN device has a failure, or is not working as expected. For example, if a sector light has failed, this should set the flag. If either the Racon of the main light has failed (or operating at reduced range in the case of the light), then this will also set the flag as well as the correct bit settings in the racon / main light bits. This allows a very simple indication of a problem on the AtoN without needing to decode the rest of the bits (e.g. useful for charting software to provide a quick method of determining the status of the AtoN).</li>
+      <li>The flag should not be set by failures that do not directly affect the use of the AtoN by the mariner. For example, a failure of the telemetry system should not be relayed to the mariner. Also, if the station’s batteries are running low, this should not set the AtoN Alarm flag (unless it causes a failure of an AtoN device).</li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="iala-a-126-gla-message-format">IALA A-126 GLA message format</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th style="text-align: center">No. of bits</th>
+      <th>Description</th>
+      <th>MANDO</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">Message Id</code></td>
+      <td style="text-align: center">6</td>
+      <td>Identifier for this message 6; always 6.</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Repeat Indicator</code></td>
+      <td style="text-align: center">2</td>
+      <td>Used by the repeater to indicate how many times a message has been repeated. 0 – 3; default = 0; 3 = do not repeat any more.</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Source ID</code></td>
+      <td style="text-align: center">30</td>
+      <td>MMSI number of source Unit</td>
+      <td>Real AtoN station MMSI</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Sequence Number</code></td>
+      <td style="text-align: center">2</td>
+      <td>0 ~ 3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Destination ID</code></td>
+      <td style="text-align: center">30</td>
+      <td>MMSI number of destination Unit.</td>
+      <td>Configuration via AID,D.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Retransmit Flag</code></td>
+      <td style="text-align: center">1</td>
+      <td>Retransmit Flag should be set upon retransmission:<br />0 = no retransmission = default<br />1 = retransmitted.</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Spare</code></td>
+      <td style="text-align: center">1</td>
+      <td>Not used. Should be zero.</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">DAC</code></td>
+      <td style="text-align: center">10</td>
+      <td>Destination Area Code.<br />Default: 235 (UK &amp; NI) or 250 (ROI)</td>
+      <td>235</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">FI</code></td>
+      <td style="text-align: center">6</td>
+      <td>Function Identifier<br />Default: 10 for this GLA standard message</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Analogue</code></td>
+      <td style="text-align: center">10</td>
+      <td>0.05– 36V 0.05V step Supply voltage to AIS Unit<br />0 – Not Used</td>
+      <td>ADC1</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Analogue</code></td>
+      <td style="text-align: center">10</td>
+      <td>0.05– 36V 0.05V step Supply voltage to AIS Unit<br />0 – Not Used</td>
+      <td>ADC2</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Analogue</code></td>
+      <td style="text-align: center">10</td>
+      <td>0.05– 36V 0.05V step Supply voltage to AIS Unit<br />0 – Not Used</td>
+      <td>ADC3</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">AtoN Status Bits</code></td>
+      <td style="text-align: center">5</td>
+      <td>4\ / 00 – no RACON installed; 01 – RACON not monitored<br />3 / \ 10 – RACON operational; 11 – RACON ERROR<br />2 \ / 00 – no light or no monitoring; 01 – Light ON<br />1 / \ 10 – Light OFF; 11 – Light ERROR<br />0 0 - Good Health, 1 - Alarm</td>
+      <td>Same as AIS message 21</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Status Bits</code></td>
+      <td style="text-align: center">8</td>
+      <td>7 Digital Input Off/On<br />:<br />:<br />:<br />0 Digital Input Off/On</td>
+      <td>Digital Input</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Off Position Satus</code></td>
+      <td style="text-align: center">1</td>
+      <td>Off position or On position<br />0: On position<br />1: Off position</td>
+      <td>Same as AIS message 21</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Spare</code></td>
+      <td style="text-align: center">4</td>
+      <td>For future use. Should be zero.</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Total of bits</td>
+      <td style="text-align: center">136</td>
+      <td>Occupies 1 slot.</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="meteorological-and-hydrographic-data">Meteorological and Hydrographic data</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>No. of bits</th>
+      <th>NMEA0183 formatter</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">Message Id</code></td>
+      <td>6</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Repeat Indicator</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Source ID</code></td>
+      <td>30</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Spare</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">IAI</code></td>
+      <td>16</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Longitude</code></td>
+      <td>25</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Latitude</code></td>
+      <td>24</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Position Accuracy</code></td>
+      <td>1</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">UTC Day</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">UTC Hour</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">UTC Minute</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Average Wind Speed</code></td>
+      <td>7</td>
+      <td>MWD wind speed output</td>
+      <td>The wind speed provided by the sensor is averaged over 10 minutes before transmit AIS message</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wind Gust</code></td>
+      <td>7</td>
+      <td>MWD wind speed output</td>
+      <td>This value is the peak wind speed recorded during the previous 10 minute period</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wind Direction</code></td>
+      <td>9</td>
+      <td>MWD wind speed output</td>
+      <td>The wind direction provided by the sensor is averaged over 10 minutes before transmit AIS message</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wind Gust Direction</code></td>
+      <td>9</td>
+      <td>MWD wind direction output</td>
+      <td>The direction of the wind at the peak wind speed during the previous 10 minute period</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Air Temperature</code></td>
+      <td>11</td>
+      <td>MDA air temperature output</td>
+      <td>The air temperature provided by the sensor is averaged over 10 minutes before output</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Relative Humidity</code></td>
+      <td>7</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Dew Point</code></td>
+      <td>10</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Air Pressure</code></td>
+      <td>9</td>
+      <td>MDA barometric pressure output</td>
+      <td>The barometric pressure provided by the sensor is averaged over 10 minutes before output</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Air Pressure Tendency</code></td>
+      <td>2</td>
+      <td>MDA barometric pressure output</td>
+      <td>The air pressure is monitored over a 30 minute period and ‘steady’, ‘increasing’ or ‘decreasing’ tendency reported as appropriate</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Horizontal Visibility</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Water level (incl. tide)</code></td>
+      <td>12</td>
+      <td> </td>
+      <td>Water level averaged over the data reporting interval specified for this message.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Water Level Trend</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Surface Current Speed (incl.tide)</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Surface Current Direction</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Speed, #2</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Direction, #2</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Measuring level, #2</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Speed, #3</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Direction, #3</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Measuring level, #3</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Significant Wave Height</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wave Period</code></td>
+      <td>6</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wave Direction</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Swell Height</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Swell Period</code></td>
+      <td>6</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Swell Direction</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Sea State</code></td>
+      <td>4</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Water Temperature</code></td>
+      <td>10</td>
+      <td>MTW, water temperature degrees C</td>
+      <td>Current temperature reported by the sensor</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Precipitation (type)</code></td>
+      <td>3</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Salinity</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Ice</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Spare</code></td>
+      <td>10</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="meteorological-and-hydrographic-data-srt">Meteorological and Hydrographic data (SRT)</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>No. of bits</th>
+      <th>Description</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">Message Id</code></td>
+      <td>6</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Repeat Indicator</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Source ID</code></td>
+      <td>30</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Spare</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">IAI</code></td>
+      <td>16</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Longitude</code></td>
+      <td>25</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Latitude</code></td>
+      <td>24</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Position Accuracy</code></td>
+      <td>1</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">UTC Day</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">UTC Hour</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">UTC Minute</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Average Wind Speed</code></td>
+      <td>7</td>
+      <td><code class="highlighter-rouge">data[0]</code></td>
+      <td>Airmar 150WX weather station WIMWD wind speed output</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wind Gust</code></td>
+      <td>7</td>
+      <td> </td>
+      <td>Airmar 150WX weather station WIMWD wind speed output</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wind Direction</code></td>
+      <td>9</td>
+      <td> </td>
+      <td>Airmar 150WX weather station WIMWD wind direction output</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wind Gust Direction</code></td>
+      <td>9</td>
+      <td> </td>
+      <td>Airmar 150WX weather station WIMWD wind direction output</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Air Temperature</code></td>
+      <td>11</td>
+      <td> </td>
+      <td>Airmar 150WX weather station WIMDA air temperature output</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Relative Humidity</code></td>
+      <td>7</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Dew Point</code></td>
+      <td>10</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Air Pressure</code></td>
+      <td>9</td>
+      <td> </td>
+      <td>Airmar 150WX weather station WIMDA barometric pressure output</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Air Pressure Tendency</code></td>
+      <td>2</td>
+      <td> </td>
+      <td>Airmar 150WX weather station WIMDA barometric pressure output</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Horizontal Visibility</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Water level (incl. tide)</code></td>
+      <td>12</td>
+      <td> </td>
+      <td>IMPRESS S12C sensor water level</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Water Level Trend</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Surface Current Speed (incl.tide)</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Surface Current Direction</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Speed, #2</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Direction, #2</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Measuring level, #2</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Speed, #3</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Direction, #3</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Current Measuring level, #3</code></td>
+      <td>5</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Significant Wave Height</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wave Period</code></td>
+      <td>6</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Wave Direction</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Swell Height</code></td>
+      <td>8</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Swell Period</code></td>
+      <td>6</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Swell Direction</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Sea State</code></td>
+      <td>4</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Water Temperature</code></td>
+      <td>10</td>
+      <td> </td>
+      <td>IMPRESS S12C sensor water temperature</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Precipitation (type)</code></td>
+      <td>3</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Salinity</code></td>
+      <td>9</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Ice</code></td>
+      <td>2</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Spare</code></td>
+      <td>10</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+
+</div>
+        <!-- content -->
+        </div>
+    </body>
+</html>

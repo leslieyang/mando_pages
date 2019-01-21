@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+    <!--head-->
+    <head>
+    <meta charset="utf-8">
+    <title>Mando_msgidindex_usage</title>
+    <link rel="stylesheet" href="/mando_doc/assets/css/styles.css">
+</head>
+    <!--head-->
+    <body>
+        <div class="page-main">
+        <!-- sidebar -->
+        <div class="page-sidebar">
+    
+    
+
+    <a  href="/mando_doc/index.html">Home</a>
+    
+    <h3>Introduction</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/README.html">Introduction</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/MANDO_IO.html">Interface</a>
+        
+        </p>
+    
+    <h3>Support Sentence</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/NMEA0183.html">NMEA0183</a>
+        
+        </p>
+    
+    <h3>Support AIS Message</h3>
+        <p>
+        
+            
+            
+            <a class="active" href="/mando_doc/pages/MANDO_MsgIdIndex_Usage.html">Message Usage</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/Msg06_GLA.html">IALA Msg6</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/Msg08_MeteroHydro.html">IMO Metero Hydro</a>
+        
+        </p>
+    
+    <h3>FAQ</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/Chaining.html">Chaining</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/AtoNStatusBits.html">AtoN Status Bits</a>
+        
+        </p>
+    
+</div>
+
+        <!-- sidebar -->
+
+        <!-- content -->
+        <div class="page-content">
+    <h1 id="message-id-index-usage">Message ID Index Usage</h1>
+
+<p>This document descript AMEC MANDO message ID and message ID index usage.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">ID</th>
+      <th style="text-align: center">Index</th>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">1</td>
+      <td>ABM</td>
+      <td>Scheduling setting for ABM(Addressed Binary Message).<br />The format of ABM is defined in NMEA0183.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">2</td>
+      <td>GLA</td>
+      <td>Scheduling setting for GLA message format, define by IALA A-126 document.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">~~6~~</td>
+      <td style="text-align: center">~~3~~</td>
+      <td><del>ShanHai Msg</del></td>
+      <td><del>Scheduling setting for Shang Hai message format.</del></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">6</td>
+      <td>Lantern status</td>
+      <td>Scheduling setting for lantern status report.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">8</td>
+      <td style="text-align: center">1</td>
+      <td>BBM</td>
+      <td>Scheduling setting for BBM(Broadcast Binary Message).<br />The format of BBM is defined in NMEA0183.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">8</td>
+      <td style="text-align: center">3</td>
+      <td>Metero/Hydro</td>
+      <td>Scheduling setting for IMO SN.1/Circ.289 (2010/01/02).<br />Meteorological and hydrographic data format.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">12</td>
+      <td style="text-align: center">1</td>
+      <td>ABM</td>
+      <td>Scheduling setting for ABM(Addressed Binary Message).<br />The format of ABM is defined in NMEA0183.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">12</td>
+      <td style="text-align: center">2</td>
+      <td>off-position SRM</td>
+      <td>Scheduling setting for off position alarm message.<br />Content for message 12 requires configuration at the Auxiliary tab.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">14</td>
+      <td style="text-align: center">1</td>
+      <td>BBM</td>
+      <td>Scheduling setting for BBM(Broadcast Binary Message).<br />The format of BBM is defined in NMEA0183.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">14</td>
+      <td style="text-align: center">2</td>
+      <td>off-position SRM</td>
+      <td>Scheduling setting for off position alarm message.<br />Content for message 12 requires configuration at the Auxiliary tab.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">21</td>
+      <td style="text-align: center">0</td>
+      <td>On position</td>
+      <td>AtoN position report</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">21</td>
+      <td style="text-align: center">1</td>
+      <td>Off position</td>
+      <td>AtoN position report</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td>Chaining</td>
+      <td>For chaining</td>
+    </tr>
+  </tbody>
+</table>
+
+
+</div>
+        <!-- content -->
+        </div>
+    </body>
+</html>

@@ -1,0 +1,968 @@
+<!doctype html>
+<html>
+    <!--head-->
+    <head>
+    <meta charset="utf-8">
+    <title>Nmea0183</title>
+    <link rel="stylesheet" href="/mando_doc/assets/css/styles.css">
+</head>
+    <!--head-->
+    <body>
+        <div class="page-main">
+        <!-- sidebar -->
+        <div class="page-sidebar">
+    
+    
+
+    <a  href="/mando_doc/index.html">Home</a>
+    
+    <h3>Introduction</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/README.html">Introduction</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/MANDO_IO.html">Interface</a>
+        
+        </p>
+    
+    <h3>Support Sentence</h3>
+        <p>
+        
+            
+            
+            <a class="active" href="/mando_doc/pages/NMEA0183.html">NMEA0183</a>
+        
+        </p>
+    
+    <h3>Support AIS Message</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/MANDO_MsgIdIndex_Usage.html">Message Usage</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/Msg06_GLA.html">IALA Msg6</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/Msg08_MeteroHydro.html">IMO Metero Hydro</a>
+        
+        </p>
+    
+    <h3>FAQ</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/Chaining.html">Chaining</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/AtoNStatusBits.html">AtoN Status Bits</a>
+        
+        </p>
+    
+</div>
+
+        <!-- sidebar -->
+
+        <!-- content -->
+        <div class="page-content">
+    <h1 id="nmea-0183">NMEA 0183</h1>
+
+<hr />
+
+<p>Standard for Interfacing Marine Electronic Devices</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Formatter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><a href="#abm">ABM</a></td>
+      <td>AIS Addressed Binary and Safety Related Message</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="#acf">ACF</a></td>
+      <td>General AtoN Station Configuration Command</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="#acg">ACG</a></td>
+      <td>Extended General AtoN Station Configuration Command</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="#aid">AID</a></td>
+      <td>AtoN Identification Configuration Command</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="#alr">ALR</a></td>
+      <td>Set Alarm State</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="#bbm">BBM</a></td>
+      <td>AIS Broadcast Binary Message</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="#cbr">CBR</a></td>
+      <td>Configure Broadcast Rates for AIS AtoN Station Message Command</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="#meb">MEB</a></td>
+      <td>Message Input for Broadcast, Command</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><a href="#ver">VER</a></td>
+      <td>Version</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="abm"><a id="abm"></a>ABM</h2>
+
+<p><b>AIS Addressed Binary and Safety Related Message</b></p>
+
+<p>This sentence supports <a href="#m1371">ITU-R M.1371</a> messages 6, 12, 25 and 26 and provides an external application with a means to exchange data via an AIS transponder. Data is defined by the application only, not the AIS unit. This sentence offers great flexibility for implementing system functions that use the transponder like a communications device. After receiving this sentence via the NMEA 0183 interface, the transponder initiates a VDL broadcast of message 6, 12, 25, or 26. The AIS unit will make up to four broadcasts of message 6 and 12. The actual number will depend on the reception of an acknowledgement from the addressed “destination” AIS unit. The success or failure of reception of this transmission by the addressed AIS unit for messages 6 and 12 is confirmed through the use of the “Addressed Binary and safety related message Acknowledgement” ABK sentence formatter, and the processes that supports the generation of an ABK sentence. The AIS transponder determines the appropriate communications state for transmission of message 26 over the VHF data Link.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!</span><span class="nt">--ABM</span>,x,x,x,xxxxxxxxx,x,xx,s--s,x<span class="k">*</span>hh&lt;CR&gt;&lt;LF&gt;
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><code class="highlighter-rouge">!--ABM</code></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Total number of sentences needed to transfer the message, 1 ~ 9</td>
+      <td>The total number of sentences required to transfer the binary message data to the AIS unit.<br />* The first field specifies the total number of sentences used for a message, minimum value 1.<br />* The second field identifies the order of this sentence in the message, minimum value 1.<br />* All sentences contain the same number of fields. Successive sentences may use null fields for fields that have not changed, such as fields 4, 5, and 6.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Sentence number, 1 ~ 9</td>
+      <td>see above</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Sequential message identifier, 0 ~ 3</td>
+      <td>This sequential message identifier serves two purposes. It meets the requirements as stated in Section 5.3.4 of this standard, and it is the sequence number utilized by ITU-R M.1371 in message types 6 and 12. The range of this field is restricted by ITU-R M1371 to 0 - 3. The sequential message identifier value may be reused after the AIS unit provides the “ABK” acknowledgement for this number. (See ABK Sentence).</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code class="highlighter-rouge">xxxxxxxxx</code></td>
+      <td>The MMSI of the destination AIS unit for the ITU-R M.1371 message</td>
+      <td>The MMSI of the AIS unit that is the destination of the message.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>AIS channel for broadcast of the radio message</td>
+      <td>The AIS channel that shall be used for the broadcast:<br />0 = no broadcast channel preference,<br />1 = Broadcast on AIS channel A,<br />2 = Broadcast on AIS channel B,<br />3 = Broadcast message on both AIS channels A and B.</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code class="highlighter-rouge">xx</code></td>
+      <td>ITU-R M.1371 message Id</td>
+      <td>The ITU-R M.1371 message Id for the following addressed messages:<br />6 = Binary addressed message,<br />12 = Addressed safety related message,<br />25 = Single slot binary message 25 (binary data coded using the 16-bit Application identifier),<br />70 = Single slot binary message 25 (unstructured binary data),<br />26 = Multiple slot binary message 26 with Communications State (binary data coded using the 16-bit Application identifier),<br />71 = Multiple slot binary message 26 with Communications State (unstructured binary data).</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><code class="highlighter-rouge">x--x</code></td>
+      <td>Encapsulated data</td>
+      <td>This is the content of the “binary data” parameter for ITU-R M.1371 message 6, or the “Safety related Text” parameter for message 12, or the “binary data” parameter for message 25, or the “binary data” parameter for message 26. The first sentence may contain up to 48 valid Six Bit codes (288 bits). Following sentences may contain up to 60 valid Six Bit codes (360 bits), if fields 4, 5, and 6 are unchanged from the first sentence and set to null. The actual number of valid characters must be such that the total number of characters in a sentence does not exceed the “82-character” limit.</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>number of fill-bits</td>
+      <td>This cannot be a null field.</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><code class="highlighter-rouge">hh</code></td>
+      <td>checksum</td>
+      <td>checksum</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="acf"><a id="acf"></a>ACF</h2>
+
+<p><b>General AtoN Station Configuration Command</b></p>
+
+<p>This sentence and the ACG sentence are used to configure Message 21 content for Real, Synthetic, and Virtual AIS AtoN Stations.
+Content of message 21 is determined by the AIS AtoN station as configured by the ACG and ACF sentences and other processes monitoring the status of the AtoN (See <a href="#iec_62320_2">IEC 62320-2</a>.).
+This sentence can be queried.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$-</span><span class="nt">-ACF</span>,xxxxxxxxx,x,llll.llll,a,yyyyy.yyyy,a,x,xxxx,xxxx,xxxx,xxxx,x,xx,x,a<span class="k">*</span>hh&lt;CR&gt;&lt;LF&gt;
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><code class="highlighter-rouge">$--ACF</code></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><code class="highlighter-rouge">xxxxxxxxx</code></td>
+      <td>MMSI</td>
+      <td>This sentence should be accepted only if the MMSI matches a previously input MMSI (See <a href="#AID">AID</a> sentence)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Type of EPFS</td>
+      <td>Identifies the source of the position, see <a href="#m1371">ITU-R M.1371</a> Message 21 parameter (Type of electronic position fixing device)</td>
+    </tr>
+    <tr>
+      <td>3,4</td>
+      <td><code class="highlighter-rouge">llll.llll,a</code></td>
+      <td>Charted Latitude – N/S</td>
+      <td>Charted position (See <a href="#iala_a126">IALA A.126</a>). If EPFS is “7 (surveyed),” this parameter is the broadcast position. Otherwise the EPFS position is broadcast.</td>
+    </tr>
+    <tr>
+      <td>5,6</td>
+      <td><code class="highlighter-rouge">yyyyyy.yyyy,a</code></td>
+      <td>Charted Longitude – E/W</td>
+      <td>see above</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Position accuracy</td>
+      <td>0 = low &gt; 10m.<br />1 = high &lt; 10m; differential mode of DGNSS.</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><code class="highlighter-rouge">xxxx</code></td>
+      <td>Rx channel A</td>
+      <td>VHF channel number, see ITU-R M.1084. Default values, Rx channel A = 2087 (simplex on AIS1), Tx channel A = 2087 (simplex on AIS1), Rx channel B = 2088 (simplex on AIS2), and Tx channel B = 2088 (simplex on AIS2)</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><code class="highlighter-rouge">xxxx</code></td>
+      <td>Rx channel B</td>
+      <td>See above</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><code class="highlighter-rouge">xxxx</code></td>
+      <td>Tx channel A</td>
+      <td>See above</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><code class="highlighter-rouge">xxxx</code></td>
+      <td>Tx channel B</td>
+      <td>See above</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Power level</td>
+      <td>0 = default manufacturer power level (nominally 12,5 Watts)<br />1 to 9 as defined by the manufacturer</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td><code class="highlighter-rouge">xx</code></td>
+      <td>Type of AtoN</td>
+      <td>See ITU-R M.1371,Message 21, “Type of aids-to-navigation” parameter:<br />0 = Type of AtoN not specified (default)<br />1 to 31 = Type as defined in ITU-R M.1371, Message 21, Table 71 (“The nature and type of AtoN can be indicated with 32 different codes”)</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Virtual flag</td>
+      <td>See ITU-R M.1371,Message 21, “Virtual AtoN flag” parameter and “Repeat indicator” parameter<br /> 0 = Set “Virtual AtoN flag” to “0” and “Repeat indicator” parameter to “0,” for a real AtoN at the indicated position. This is the default value.<br />1 = Set Virtual AtoN flag to “1,” for a Virtual AtoN at the indicated position.<br />2 = Set Virtual AtoN flag to “0” and Repeat indicator parameter to value other than “0,” for a Synthetic AtoN at the indicated position.</td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td><code class="highlighter-rouge">a</code></td>
+      <td>Sentence status flag</td>
+      <td>This field is used to indicate a sentence that is a status report of current settings or a configuration command changing settings. This field should not be null.<br />R = Sentence is a status report of current settings (use for a reply to a query).<br />C = Sentence is a configuration command to change settings. A sentence without “C” is not a command.</td>
+    </tr>
+    <tr>
+      <td>16</td>
+      <td><code class="highlighter-rouge">hh</code></td>
+      <td>checksum</td>
+      <td>checksum</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="acg"><a id="acg"></a>ACG</h2>
+
+<p><b>General AtoN Station Configuration Command</b></p>
+
+<p>This sentence and the ACF sentence are used to configure the AtoN Station parameters when it is initially installed, and later in order to make changes to the way it operates. This sentence supports system administration of the AIS AtoN Station operation.<br />This sentence can be queried.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$-</span><span class="nt">-ACG</span>,xxxxxxxxx,hh,xxxx,x,x,x,c--c,xxxxxxxxxx,a<span class="k">*</span>hh&lt;CR&gt;&lt;LF&gt;
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><code class="highlighter-rouge">$--ACG</code></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><code class="highlighter-rouge">xxxxxxxxx</code></td>
+      <td>MMSI of the AtoN Station</td>
+      <td>This sentence should be accepted only if the MMSI matches a previously input MMSI (See AID sentence)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code class="highlighter-rouge">hh</code></td>
+      <td>AtoN status bits</td>
+      <td>AtoN Status Bits, Indication of the AtoN Status, default ““00 hex”: For a Virtual AtoN this field should be 00 hex. The three most significant bits represent the Page ID. (See <a href="#iec_62320_2">IEC 62320-2</a>, Annex C, Message 21 – AtoN status bits)</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code class="highlighter-rouge">xxxx</code></td>
+      <td>Off-position threshold</td>
+      <td>Off-position indicator is generated when this threshold is exceeded (distance in meters) - (See <a href="#iec_62320_2">IEC 62320-2</a>, Off-position monitoring)</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Acknowledgment procedure</td>
+      <td>Determines behavior of AtoN for message acknowledgement (replying using Message 7 and 13).<br />0 = will provide acknowledgement as defined by manufacturer (If an acknowledgement procedure is implemented, it is enabled.).<br />1 = will not provide acknowledgement (If an acknowledgement procedure is implemented, it is disabled.).</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Off-position behavior</td>
+      <td>Off-position behavior:<br />0 = Maintain current transmission schedule (use message ID Index 0)<br />1 = Use transmission schedule configured by CBR using, affected MMSI, message ID 21, message ID index 1. When the transmission schedule for Index 1 has not been configured, the off-position maintains the message ID Index 0 schedule.</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Synch lost behavior</td>
+      <td>Synch lost behavior (UTC source lost):<br />0 = Silent (no transmissions)<br />1 = Continue operation</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><code class="highlighter-rouge">c--c</code></td>
+      <td>Name of AtoN</td>
+      <td>Name of the AtoN: maximum 34 characters</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><code class="highlighter-rouge">xxxxxxxxxx</code></td>
+      <td>Dimensions</td>
+      <td>Reference point of reported position; Should be given as dimension (aaabbbccdd) of the buoy (see <a href="#m1371">ITU-R M.1371</a>,Message 21)</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><code class="highlighter-rouge">a</code></td>
+      <td>Sentence status flag</td>
+      <td>This field is used to indicate a sentence that is a status report of current settings or a configuration command changing settings. This field should not be null.<br />R = Sentence is a status report of current settings (use for a reply to a query).<br />C = Sentence is a configuration command to change settings. A sentence without “C” is not a command.</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><code class="highlighter-rouge">hh</code></td>
+      <td>checksum</td>
+      <td>checksum</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="aid"><a id="aid"></a>AID</h2>
+
+<p><b>AtoN Identification Configuration Command</b></p>
+
+<p>This sentence is used to load, for an AtoN Station, its Real, Virtual or synthetic, and chained (parent or child) MMSI(s). The Real MMSI from the factory should be as defined by manufacturer. Each AtoN Station will maintain a table of its MMSI(s). (Reference IEC 62320-2)
+For an AIS AtoN Station, this sentence must input a MMSI prior to configuring the parameters for the MMSI (See: <a href="#CBR">CBR</a>, <a href="#ACG">ACG</a>, <a href="#ACF">ACF</a>, AFB, DCR, CEK, COP, MCR, MEB, and TPC sentences).
+This sentence can be queried. When queried, the query response will continue until all known AtoN MMSIs and types have been transferred.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$-</span><span class="nt">-AID</span>,c--c,x,xxxxxxxxx,a,a<span class="k">*</span>hh&lt;CR&gt;&lt;LF&gt;
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><code class="highlighter-rouge">$--AID</code></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><code class="highlighter-rouge">c--c</code></td>
+      <td>Unique Identifier of AtoN Station</td>
+      <td>Unique Identifier of the AtoN Station. The Unique Identifier is used for system level identification of a station, 15 characters maximum. On input, this sentence should be accepted only if this data field matches the AtoN Station’s Unique Identifier. On output, this data field is the AtoN Station’s Unique Identifier. (To address an AtoN station, this should be the Real MMSI of the AIS AtoN Station being addressed. The initial factory setting of the Real MMSI should be defined by manufacturer, for example 990000000.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Create or delete MMSI</td>
+      <td>0 = delete MMSI provided in field 3;<br />1 = add MMSI provided in field 3<br />If the Real MMSI is deleted, the AIS AtoN Station’s Real MMSI should revert to the factory setting. When a MMSI is deleted, all associated messages and transmission schedules for that MMSI should be deleted.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code class="highlighter-rouge">xxxxxxxxx</code></td>
+      <td>MMSI</td>
+      <td>MMSI to be added or deleted.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code class="highlighter-rouge">a</code></td>
+      <td>Virtual, Real, or chained</td>
+      <td>Real AtoN, chained, or Virtual AtoN: Real AtoN is own station (AIS AtoN Station may have one Real MMSI). Chained indicates an MMSI that this station is responsible for relaying messages to and from. Virtual AtoN indicates an MMSI that this station is responsible for generating at least a Message 21.<br />R = Real AtoN<br />V = Virtual or Synthetic AtoN<br />P = Parent AtoN Station that is a member of a chain<br />C = Child AtoN Station that is a member of a in the chain<br />M = Maintenance</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code class="highlighter-rouge">a</code></td>
+      <td>Sentence status flag</td>
+      <td>This field is used to indicate a sentence that is a status report of current settings or a configuration command changing settings. This field should not be null.<br />R = Sentence is a status report of current settings (use for a reply to a query).<br />C = Sentence is a configuration command to change settings. A sentence without “C” is not a command.</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code class="highlighter-rouge">hh</code></td>
+      <td>checksum</td>
+      <td>checksum</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="alr"><a id="alr"></a>ALR</h2>
+
+<p><b>Set Alarm State</b></p>
+
+<p>Local alarm condition and status. This sentence is used to report an alarm condition on a device and its current state of acknowledgment.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$-</span><span class="nt">-ALR</span>,hhmmss.ss,xxx,A,A,c--c<span class="k">*</span>hh&lt;CR&gt;&lt;LF&gt;
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><code class="highlighter-rouge">$--ALR</code></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><code class="highlighter-rouge">hhmmss.ss</code></td>
+      <td>Time of alarm condition change, UTC</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code class="highlighter-rouge">xxx</code></td>
+      <td>Unique alarm number (identifier) at alarm source</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code class="highlighter-rouge">A</code></td>
+      <td>Alarm condition</td>
+      <td>A = threshold exceeded<br />V = not exceeded</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code class="highlighter-rouge">A</code></td>
+      <td>Alarm’s acknowledge state</td>
+      <td>A = acknowledged<br />V = unacknowledged</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code class="highlighter-rouge">c--c</code></td>
+      <td>Alarm’s description text</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="bbm"><a id="bbm"></a>BBM</h2>
+
+<p><b>AIS Broadcast Binary Message</b></p>
+
+<p>This sentence supports generation of ITU-R M.1371 binary messages 8, 14, 25, and 26. This provides the application with a means to broadcast data, as defined by the application only. Data is defined by the application only not the AIS. This sentence offers great flexibility for implementing system functions that use the transponder like a digital broadcast device. After receiving this sentence via the NMEA 0183 interface, the transponder initiates a VHF broadcast of message 8, 14, 25, or 26 within four seconds. See the ABK sentence for acknowledgement of the BBM with messages 8 and 14. The AIS transponder determines the appropriate communications state for transmission of message 26 over the VHF data Link.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!</span><span class="nt">--BBM</span>,x,x,x,x,xx,s--s,x<span class="k">*</span>hh&lt;CR&gt;&lt;LF&gt;
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><code class="highlighter-rouge">!--BBM</code></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Total number of sentences needed to transfer the message, 1 to 9</td>
+      <td>The total number of sentences required to transfer the contents of the binary message to the AIS unit.<br />* The first field specifies the total number of sentences used for a message, minimum value 1.<br />* The second field identifies the order of this sentence in the message, minimum value 1.<br />* All sentences contain the same number of fields. Successive sentences may use null fields for fields that have not changed, such as fields 4 and 5.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Sentence number, 1 ~ 9</td>
+      <td>See above</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Sequential Message identifier 2, 0 to 9</td>
+      <td>The Sequential message identifier provides a message identification number from 0 to 9 that is sequentially assigned and is incremented for each new multi-sentence message. The count resets to 0 after 9 is used. For a message requiring multiple sentences, each sentence of the message contains the same sequential message identification number. It is used to identify the sentences containing portions of the same message. This allows for the possibility that other sentences might be interleaved with the message sentences that, taken collectively, contain a single message. This value is used by the ABK sentence to acknowledge a specific BBM sentence.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>AIS channel for broadcast of the radio message</td>
+      <td>The AIS channel that shall be used for the broadcast:<br />0 = no broadcast channel preference,<br />1 = Broadcast on AIS channel A,<br />2 = Broadcast on AIS channel B,<br />3 = Broadcast the message on both AIS channels A and B.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code class="highlighter-rouge">xx</code></td>
+      <td>ITU-R M.1371 message Id</td>
+      <td>The ITU-R M.1371 message Id for the following broadcast messages:<br />8 = Binary broadcast message,<br />14 = Safety related broadcast message,<br />25 = Single slot binary message 25 (binary data coded using the 16-bit Application identifier),<br />70 = Single slot binary message 25 (unstructured binary data),<br />26 = Multiple slot binary message 26 with Communications State (binary data coded using the 16-bit Application identifier),<br />71 = Multiple slot binary message 26 with Communications State (unstructured binary data).</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code class="highlighter-rouge">s--s</code></td>
+      <td>Encapsulated data</td>
+      <td>This is the content of the “binary data” parameter for ITU-R M.1371 messages 8, or the “Safety related Text” parameter for message 14, or the “binary data” parameter for message 25, or the “binary data” parameter for message 26. The first sentence may contain up to 58 valid Six Bit codes (348 bits). Following sentences may contain up to 60 valid Six Bit codes (360 bits), if fields 4 and 5 are unchanged from the first sentence and set to null. The actual number of characters must be such that the total number of characters in a sentence does not exceed the “82-character” limit.</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Number of fill-bits, 0 to 5</td>
+      <td>This cannot be a null field</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><code class="highlighter-rouge">hh</code></td>
+      <td>checksum</td>
+      <td>checksum</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="cbr"><a id="cbr"></a>CBR</h2>
+
+<p><b>Configure Broadcast Rates for AIS AtoN Station Message Command</b></p>
+
+<p>This sentence configures slots and transmission intervals that will be used to broadcast AIS AtoN Station messages (See IEC 62320-2). The sentence supports scheduling of messages with real, virtual, and synthetic MMSI’s (See AID Sentence). The messages are assigned to the AIS AtoN Station for each channel.\
+Message 21 is defined by the content of the ACG and ACF sentences and is identified by the MMSI and the message ID 21. Message ID Index = 0 is reserved to define the on-position message 21 transmission schedule. Message ID Index = 1 is reserved to define the off-position message 21 transmission schedule. The off-position schedule is optional (see ACG sentence, Off-position behavior).
+Other than message 21, the combination of MMSI, Message ID, and Message ID Index are used to:\
+(1) configure,\
+(2) reference the AIS AtoN stations transmission slots, and\
+(3) link to the MEB sentence. Each message’s transmission schedule is defined by the combination of Start UTC Hour, Start UTC Minute, Start Slot, and Slot Interval.\
+The AIS AtoN Station should apply this sentence to autonomously and continuously transmit VDL messages until revised by a subsequent CBR sentence. Subsequent CBR assignments override existing CBR assignments.\
+This sentence can be queried. The query response may contain one or more sentences and will continue until the transfer of all current schedule information is complete.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$-</span><span class="nt">-CBR</span>,xxxxxxxxx,xx,x,xx,xx,xxxx,x.x,x,xx,xx,xxxx,x.x,a<span class="k">*</span>hh&lt;CR&gt;&lt;LF&gt;
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><code class="highlighter-rouge">$--CBR</code></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><code class="highlighter-rouge">xxxxxxxxx</code></td>
+      <td>MMSI</td>
+      <td>This is a MMSI previously defined for the AIS AtoN station (See AID Sentence.).</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code class="highlighter-rouge">xx</code></td>
+      <td>Message ID</td>
+      <td>Message ID is the number of the message being scheduled (See ITU-R M.1371). When Message ID is 0 this indicates that the slots being defined will be used for either chaining messages or MEB single transmissions (See <a href="#iec_62320_2">IEC 62320-2</a>).</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Message ID Index</td>
+      <td>Message ID Index is used to distinguish multiple occurrences of the same MMSI and Message ID combination. Valid range is 0 to 7.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code class="highlighter-rouge">xx</code></td>
+      <td>Start UTC hour, channel A</td>
+      <td>Nominal start slot for each channel is determined by the combination of Start UTC hour, Start UTC minute, and Start slot.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code class="highlighter-rouge">xx</code></td>
+      <td>Start UTC minute, channel A</td>
+      <td>see above</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code class="highlighter-rouge">xxxx</code></td>
+      <td>Start slot, channel A</td>
+      <td>Starting slot valid range is -1 to 2249.<br />* A value of –1 clears the schedule and discontinues the broadcasts for the indicated channel(s).<br />For FATDMA, a null field indicates no change to the current start slot setting when set to the AtoN Station.<br />For RATDMA, start slot defines the first slot of the RATDMA selection interval.<br />For RATDMA, a null field indicates that the selection interval randomly selected within the frame. In response to a query this field cannot be null.<br />* In response to a query, a value of -1 indicates that the message is not scheduled for broadcast on the indicated channel.<br />The query response for the start slot selection interval when in RATDMA mode does not distinguish between a previous commanded value or a random chosen value.<br />* The current start slot of the selection interval (the value as specified by a previous CBR command sentence).<br />* The current start slot of the selection interval (the value chosen randomly by the AIS device as specified by a previous CBR command sentence).</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><code class="highlighter-rouge">x.x</code></td>
+      <td>Slot interval, channel A</td>
+      <td>Message transmission slot interval, valid range is -1 to 3 240 000 slots (24<em>60</em>2250 = 3 240 000 is once per day). When configuring a AtoN Station with an RATDMA/CSTDMA schedule the valid range is: 0 to (24<em>60</em>60) slots. A null field indicates no change to the current slot interval setting when sent to the AtoN Station. In response to a query this field cannot be null, -1 indicates that the slot interval is not set.</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>FATDMA or RATDMA/CSTDMA setup</td>
+      <td>Used to select whether the CBR is configuring a FATDMA schedule or RATDMA/CSTDMA schedule (0 indicates FATDMA, 1 indicates RATDMA, and 2 indicates CSTDMA). For RATDMA/CSTDMA modes, the Slot Interval is the time between the start slots of the Selection Intervals.</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><code class="highlighter-rouge">xx</code></td>
+      <td>Start UTC hour, channel A</td>
+      <td>Nominal start slot for each channel is determined by the combination of Start UTC hour, Start UTC minute, and Start slot.</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><code class="highlighter-rouge">xx</code></td>
+      <td>Start UTC minute, channel B</td>
+      <td>see above</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><code class="highlighter-rouge">xxxx</code></td>
+      <td>Start slot, channel B</td>
+      <td>Starting slot valid range is -1 to 2249.<br />* A value of –1 clears the schedule and discontinues the broadcasts for the indicated channel(s).<br />For FATDMA, a null field indicates no change to the current start slot setting when set to the AtoN Station.<br />For RATDMA, start slot defines the first slot of the RATDMA selection interval.<br />For RATDMA, a null field indicates that the selection interval randomly selected within the frame. In response to a query this field cannot be null.<br />* In response to a query, a value of -1 indicates that the message is not scheduled for broadcast on the indicated channel.<br />The query response for the start slot selection interval when in RATDMA mode does not distinguish between a previous commanded value or a random chosen value.<br />* The current start slot of the selection interval (the value as specified by a previous CBR command sentence).<br />* The current start slot of the selection interval (the value chosen randomly by the AIS device as specified by a previous CBR command sentence).</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td><code class="highlighter-rouge">x.x</code></td>
+      <td>Slot interval, channel B</td>
+      <td>Message transmission slot interval, valid range is -1 to 3 240 000 slots (24<em>60</em>2250 = 3 240 000 is once per day). When configuring a AtoN Station with an RATDMA/CSTDMA schedule the valid range is: 0 to (24<em>60</em>60) slots. A null field indicates no change to the current slot interval setting when sent to the AtoN Station. In response to a query this field cannot be null, -1 indicates that the slot interval is not set.</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Sentence Status Flag</td>
+      <td>This field is used to indicate a sentence that is a status report of current settings or a configuration command changing settings. This field should not be null.<br />R = Sentence is a status report of current settings (use for a reply to a query).<br />C = Sentence is a configuration command to change settings. A sentence without “C” is not a command.</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td><code class="highlighter-rouge">hh</code></td>
+      <td>checksum</td>
+      <td>checksum</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="meb"><a id="meb"></a>MEB</h2>
+
+<p><b>Message Input for Broadcast, Command</b></p>
+
+<p>This sentence is used to input a message for storage or immediate broadcast. The sentence associates messages with real, virtual, and synthetic MMSI’s (See AID sentence).\
+The stored message is associated by the MMSI, Message ID, and Message ID Index. The combination of MMSI, Message ID, and Message ID Index are used to reference the stored message and link the message to a transmission schedule as defined by a CBR sentence. The stored message’s broadcast begins when both the message content and schedule (See CBR sentence) have been entered.\
+For immediate message broadcast, the binary data will be broadcast using the slots reserved by the CBR sentence with both Message ID and Message ID Index = 0, or will be broadcast using the next available slot. The channel for the immediate message broadcast is specified by the “AIS channel for broadcast of the radio message” (parameter field 4).\
+This sentence can be queried. When queried, the query response may contain one or more sentences and will continue until the transfer of all stored information is complete.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!</span><span class="nt">--MEB</span>,x,x,x,x,xxxxxxxxx,xx,x,x,xxxxxxxxx,x,a,s--s,x<span class="k">*</span>hh&lt;CR&gt;&lt;LF&gt;
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><code class="highlighter-rouge">!--MEB</code></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Total number of sentences needed to transfer the message, 1 to 9</td>
+      <td>The total number of sentences required to transfer the binary message data to the AIS unit. The first field specifies the total number of sentences used for a message, minimum value 1. The second field identifies the order of this sentence in the message, minimum value 1. All sentences contain the same number of fields. Successive sentences may use null fields for fields that have not changed, such as fields 4, 5, 6, 7, 8, 9, and 10.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Sentence number, 1 to 9</td>
+      <td>See above</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Sequential message identifier, 0 to 3</td>
+      <td>This sequential message identifier serves two purposes. It meets the requirements as stated in Section 5.3.4 and it is the sequence number utilized by ITU-R M.1371 in message types 6 and 12. The range of this field is restricted by ITU-R M1371 to 0 - 3. The sequential message identifier value may be reused after the AIS unit provides the “ABK” acknowledgement for this number. (See ABK Sentence).</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>AIS channel for broadcast of the radio message</td>
+      <td>The AIS channel that should be used for the broadcast:<br />0 = no broadcast channel preference, -<br />1 = broadcast on AIS channel A,<br />2 = broadcast on AIS channel B,<br />3 = broadcast message on both AIS channels A and B,<br />For an immediate message broadcast, this cannot be null. For a stored message it should be null.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code class="highlighter-rouge">xxxxxxxxx</code></td>
+      <td>MMSI</td>
+      <td>For the message to be broadcast, this MMSI must match a previously entered a real, virtual, or synthetic MMSI (See AID and CBR Sentences)</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code class="highlighter-rouge">xx</code></td>
+      <td>ITU-R M.1371 message Id</td>
+      <td>ITU-R M.1371 messages supported by this sentence: 6, 8, 12, 14, 25, and 26. See IEC 62320-2 for the ITU-R M.1371 messages that are supported by an AIS AtoN Station.</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Message ID Index</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Broadcast behavior</td>
+      <td>Broadcast behavior values:<br />0 = For an AtoN device, the message is stored in volatile memory for autonomous continuous transmission as defined by a CBR sentence. The message is identified by the combination of MMSI, Message ID, and Message ID Index.<br />1 = For an AtoN device, a single transmission (not stored in the “message table”) using the next available slot following slot selection priority:<br />&lt;p&gt;* If a MEB is received for a given MMSI, Message ID, and Message ID Index and the MMSI, Message ID, and Message ID Index, already has a broadcast schedule then that schedule is used to send the new message.<br />* If a MEB is received for a given MMSI, Message ID, and Message ID Index and the MMSI, Message ID, and Message ID Index, does not have a broadcast schedule, then the message is transmitted using the next available slot using the following priority scheme.<br />&lt;p&gt;* Use CBR definition,Message ID = 0, Message ID Index = 0 (if available)<br />* Use RATDMA if supported by the AtoN unit&lt;/p&gt;&lt;/p&gt;<br />2 = for continuous transmission in non-volatile memory<br />3 = delete the stored message (this includes volatile and non- volatile)<br />4 – 9 = reserved for future use</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><code class="highlighter-rouge">xxxxxxxxx</code></td>
+      <td>Destination MMSI, for addressed messages</td>
+      <td>The “Destination MMSI, for Addressed Messages” should be a null field when the message is not destination specific, and is intended to be destination broadcast on the VHF Data Link.</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Binary data flag</td>
+      <td>The “Binary data flag” field has a range from 0 to 1 with the following meaning:<br />0 = unstructured binary data (no Application Identifier bits used)<br />1 = binary data coded as defined by using the 16-bit Application Identifier (See ITU-R M.1371, messages 25 and 26)</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><code class="highlighter-rouge">a</code></td>
+      <td>Sentence status flag</td>
+      <td>This field is used to indicate a sentence that is a status report of current settings or a configuration command changing settings. This field should not be null.<br />R = Sentence is a status report of current settings (use for a reply to a query).<br />C = Sentence is a configuration command to change settings. A sentence without “C” is not a command.</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td><code class="highlighter-rouge">s--s</code></td>
+      <td>Encapsulated data</td>
+      <td>This is the content of the “binary data” parameter for either ITU-R M.1371 MESSAGE 6, 8, 25, or 26, or the “Safety related Text” parameter for either message 12 or 14. The actual number of “6-bit” symbols in a sentence must be adjusted so that the total number of characters in a sentence does not exceed the “82- character” limit.</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Number of fill-bits, 0 to 5</td>
+      <td>This cannot be a null field</td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td><code class="highlighter-rouge">hh</code></td>
+      <td>checksum</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ver"><a id="ver"></a>VER</h2>
+
+<p><b>Version</b></p>
+
+<p>This sentence is used to provide identification and version information about a device. This sentence is produced as a reply to a query sentence.<br />
+In order to meet the 79-character requirement, a “multi-sentence message” may be needed to convey all the Data Fields.<br />
+For an AIS Base Station the VER sentence shall be output autonomously upon power-up. For other equipment the VER sentence may be output autonomously upon power-up.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$-</span><span class="nt">-VER</span>,x,x,aa,c--c,c--c,c--c,c--c,c--c,c--c,x<span class="k">*</span>hh&lt;CR&gt;&lt;LF&gt;
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td><code class="highlighter-rouge">$--VER</code></td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Total number of sentences needed, 1 to 9</td>
+      <td>Depending on the number of characters in each Data Field, it may be necessary to use a “multi-sentence message” to convey a “VER reply.”<br />* The first Data Field specifies the total number of sentences needed, minimum value 1. This is the total number of sentences required to transmit the  nformation.<br />* The second Data Field identifies the sentence number, minimum value 1.<br />Sentence number refers to the sequence number of the sentence within the total number of sentences. The tenth Data Field provides the sequential message identifier.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Sentence number, 1 to 9</td>
+      <td>see above</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code class="highlighter-rouge">aa</code></td>
+      <td>Device type</td>
+      <td>The device type is used to identify the manufactured purpose of the device. Choice of the device type identifier is based upon the designed purpose of the device. It is set into the equipment based upon the primary design of the device and remains constant even if the user defined talker identifier feature is used (See BCG Sentence). For AIS device types.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code class="highlighter-rouge">c--c</code></td>
+      <td>Vendor ID</td>
+      <td>Vendor identification (Example: either the NMEA 0183, 3-character “Manufacturer’s Mnemonic Code” or NMEA 2000, 5-digit “NumericManufacturer’s Code”, 5 characters maximum.).</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code class="highlighter-rouge">c--c</code></td>
+      <td>Unique Identifier</td>
+      <td>The Unique Identifier is used for system level identification of a device, 15 characters maximum. When used with AIS stations, on output, this data field is the AIS Station’s Unique Identifier (See the SID sentence). When an MMSI is used as the Unique Identifier, it should be the MMSI of the station (for example, the “Real MMSI” of an AtoN station)</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code class="highlighter-rouge">c--c</code></td>
+      <td>Manufacturer serial number</td>
+      <td>The manufacturer’s serial number for the unit. Note, this “internal” manufacturer’s serial number may or may not match the physical serial number of the device. Maximum length 32 characters.</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><code class="highlighter-rouge">c--c</code></td>
+      <td>Model code (product code)</td>
+      <td>The data field length may be 32 characters maximum. The length of 32 characters was chosen in order to be consistent with similar data field lengths in the NMEA 0183 standard. When large character lengths are used and the 80 character sentence limit would be exceeded for a single sentence, a series of successive VER sentences should be used to avoid the problem (using Data Fields 1, 2, and 10 to ensure the multiple VER sentences are properly associated by the listener). Though null fields can be used for data fields contained in other sentences of the series, the Unique Identifier field should always contain the same value in every sentence of the series.</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><code class="highlighter-rouge">c--c</code></td>
+      <td>Software revision</td>
+      <td>see above</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><code class="highlighter-rouge">c--c</code></td>
+      <td>Hardware revision</td>
+      <td>see above</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><code class="highlighter-rouge">x</code></td>
+      <td>Sequential message identifier</td>
+      <td>The sequential message identifier provides a message identification number from 0 to 9 that is sequentially assigned and is incremented for each new multi-sentence message. The count resets to 0 after 9 is used. For a message requiring multiple sentences, each sentence of the message contains the same sequential message identification number. It is used to identify the sentences containing portions of the same message. This allows for the possibility that other sentences might be interleaved with the message sentences that, taken collectively, contain a single message. This Data Field may be a null field for messages that fit into one sentence.</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><code class="highlighter-rouge">hh</code></td>
+      <td>checksum</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="reference">Reference</h2>
+
+<ul>
+  <li>
+    <p><a id="m1371"></a>ITU-R M.1371: Technical characteristics for an automatic identification system using time-division multiple access in the VHF maritime mobile band. <a href="http://www.itu.int/rec/R-REC-M.1371/en">Link</a></p>
+  </li>
+  <li>
+    <p><a id="nmea0183"></a>NMEA-0183: Standard for Interfacing Marine Electronic Devices <a href="http://www.nmea.org/content/nmea_standards/nmea_0183_v_410.asp">Link</a></p>
+  </li>
+  <li>
+    <p><a id="iec_62320_2"></a>IEC 62320-2 2016: Maritime navigation and radiocommunication equipment and systems - Automatic identification system (AIS) - Part 2: AIS AtoN Stations - Operational and performance requirements, methods of testing and required test results. <a href="https://webstore.iec.ch/publication/26132">Link</a></p>
+  </li>
+  <li>
+    <p><a id="iala_a126"></a>IALA A-126: The Use of the Automatic Identification System (AIS) in Marine Aids to Navigation Services. <a href="http://www.iala-aism.org/product/use-of-the-ais-in-marine-aids-to-navigation-service-126/">Link</a></p>
+  </li>
+</ul>
+
+
+</div>
+        <!-- content -->
+        </div>
+    </body>
+</html>

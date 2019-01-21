@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+    <!--head-->
+    <head>
+    <meta charset="utf-8">
+    <title>Msg06_gla</title>
+    <link rel="stylesheet" href="/mando_doc/assets/css/styles.css">
+</head>
+    <!--head-->
+    <body>
+        <div class="page-main">
+        <!-- sidebar -->
+        <div class="page-sidebar">
+    
+    
+
+    <a  href="/mando_doc/index.html">Home</a>
+    
+    <h3>Introduction</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/README.html">Introduction</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/MANDO_IO.html">Interface</a>
+        
+        </p>
+    
+    <h3>Support Sentence</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/NMEA0183.html">NMEA0183</a>
+        
+        </p>
+    
+    <h3>Support AIS Message</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/MANDO_MsgIdIndex_Usage.html">Message Usage</a>
+        
+            
+            
+            <a class="active" href="/mando_doc/pages/Msg06_GLA.html">IALA Msg6</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/Msg08_MeteroHydro.html">IMO Metero Hydro</a>
+        
+        </p>
+    
+    <h3>FAQ</h3>
+        <p>
+        
+            
+            
+            <a  href="/mando_doc/pages/Chaining.html">Chaining</a>
+        
+            
+            
+            <a  href="/mando_doc/pages/AtoNStatusBits.html">AtoN Status Bits</a>
+        
+        </p>
+    
+</div>
+
+        <!-- sidebar -->
+
+        <!-- content -->
+        <div class="page-content">
+    <h1 id="iala-a-126-gla-message-format">IALA A-126 GLA message format</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th style="text-align: center">No. of bits</th>
+      <th>Description</th>
+      <th>MANDO</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">Message Id</code></td>
+      <td style="text-align: center">6</td>
+      <td>Identifier for this message 6; always 6.</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Repeat Indicator</code></td>
+      <td style="text-align: center">2</td>
+      <td>Used by the repeater to indicate how many times a message has been repeated. 0 – 3; default = 0; 3 = do not repeat any more.</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Source ID</code></td>
+      <td style="text-align: center">30</td>
+      <td>MMSI number of source Unit</td>
+      <td>Real AtoN station MMSI</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Sequence Number</code></td>
+      <td style="text-align: center">2</td>
+      <td>0 ~ 3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Destination ID</code></td>
+      <td style="text-align: center">30</td>
+      <td>MMSI number of destination Unit.</td>
+      <td>Configuration via AID,D.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Retransmit Flag</code></td>
+      <td style="text-align: center">1</td>
+      <td>Retransmit Flag should be set upon retransmission:<br />0 = no retransmission = default<br />1 = retransmitted.</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Spare</code></td>
+      <td style="text-align: center">1</td>
+      <td>Not used. Should be zero.</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">DAC</code></td>
+      <td style="text-align: center">10</td>
+      <td>Destination Area Code.<br />Default: 235 (UK &amp; NI) or 250 (ROI)</td>
+      <td>235</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">FI</code></td>
+      <td style="text-align: center">6</td>
+      <td>Function Identifier<br />Default: 10 for this GLA standard message</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Analogue</code></td>
+      <td style="text-align: center">10</td>
+      <td>0.05– 36V 0.05V step Supply voltage to AIS Unit<br />0 – Not Used</td>
+      <td>ADC1</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Analogue</code></td>
+      <td style="text-align: center">10</td>
+      <td>0.05– 36V 0.05V step Supply voltage to AIS Unit<br />0 – Not Used</td>
+      <td>ADC2</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Analogue</code></td>
+      <td style="text-align: center">10</td>
+      <td>0.05– 36V 0.05V step Supply voltage to AIS Unit<br />0 – Not Used</td>
+      <td>ADC3</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">AtoN Status Bits</code></td>
+      <td style="text-align: center">5</td>
+      <td>4\ / 00 – no RACON installed; 01 – RACON not monitored<br />3 / \ 10 – RACON operational; 11 – RACON ERROR<br />2 \ / 00 – no light or no monitoring; 01 – Light ON<br />1 / \ 10 – Light OFF; 11 – Light ERROR<br />0 0 - Good Health, 1 - Alarm</td>
+      <td>Same as AIS message 21</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Status Bits</code></td>
+      <td style="text-align: center">8</td>
+      <td>bit[7] Digital Input Off/On<br />bit[6] Digital Input Off/On<br />bit[5] Digital Input Off/On<br />bit[4] Digital Input Off/On<br />bit[3] Digital Input Off/On<br />bit[2] Digital Input Off/On<br />bit[1] Digital Input Off/On<br />bit[0] Digital Input Off/On</td>
+      <td>N/A<br />N/A<br />N/A<br />N/A<br />N/A<br />N/A<br />N/A<br />Digital Input</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Off Position Satus</code></td>
+      <td style="text-align: center">1</td>
+      <td>Off position or On position<br />0: On position<br />1: Off position</td>
+      <td>Same as AIS message 21</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">Spare</code></td>
+      <td style="text-align: center">4</td>
+      <td>For future use. Should be zero.</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>Total of bits</td>
+      <td style="text-align: center">136</td>
+      <td>Occupies 1 slot.</td>
+      <td>-</td>
+    </tr>
+  </tbody>
+</table>
+
+
+</div>
+        <!-- content -->
+        </div>
+    </body>
+</html>
